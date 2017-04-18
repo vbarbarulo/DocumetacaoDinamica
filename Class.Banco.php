@@ -1,13 +1,16 @@
 <?php
+
 /* 	
   ==========================| Criação |===============================
   /*	Este Script PHP Foi criado por Vinicius Barbarulo
   /*	Esta classe conta todas as Funções para conexão
-  /*	com o banco de dados MYSQLI. 
+  /*	com o banco de dados MYSQLI.
   ====================================================================
  */
+
+
 class Banco {
-    //CONEXAO
+
     private $SQL_HOST = '';
     private $SQL_USER = '';
     private $SQL_PASSWORD = '';
@@ -18,12 +21,14 @@ class Banco {
     private $sql = '';
     private $campos = '';
     private $complemento = '';
-    function __construct($SQL_HOST = '',$SQL_USER = '',$SQL_PASSWORD  = '',$SQL_DATA_BASE  = '') {  
+
+    function __construct($SQL_HOST = '', $SQL_USER = '', $SQL_PASSWORD = '', $SQL_DATA_BASE = '') {
         $this->SQL_DATA_BASE = $SQL_DATA_BASE;
         $this->SQL_HOST = $SQL_HOST;
         $this->SQL_USER = $SQL_USER;
         $this->SQL_PASSWORD = $SQL_PASSWORD;
     }
+
     public function __set_tabela($v) {
         $this->tabela = $v;
     }
@@ -44,7 +49,11 @@ class Banco {
         $this->complemento = $v;
     }
 
-    function MontaConsulta() {
+    /**
+     * @@@InicioFuncao MontaConsulta
+     * MontaConsua de Teste fff
+      FimFuncao MontaConsulta */
+    public function MontaConsulta() {
         $ret = "";
         if ($this->campos == '') {
             $campos = " * ";
@@ -62,8 +71,7 @@ class Banco {
         return $ret;
     }
 
- 
-    function MontaInsert() {
+    public function MontaInsert() {
         $ret = '';
         $ret .= ' INSERT INTO ';
         $ret .= $this->tabela . ' (';
@@ -84,8 +92,7 @@ class Banco {
         return $ret;
     }
 
-   
-    function MontaUpdate() {
+    public function MontaUpdate() {
         $ret = '';
         $ret .= ' UPDATE ';
         $ret .= $this->tabela . ' SET ';
@@ -99,29 +106,28 @@ class Banco {
         return $ret;
     }
 
-   
-    function ExeSql($sql) {
-        $banco = new Banco();  
-        $exe = $banco->Conexao_Banco($this->SQL_HOST,$this->SQL_USER,$this->SQL_PASSWORD,$this->SQL_DATA_BASE);   
-        $exe->query($sql) or die(debug($this->campos).'<h1>Erro ao Registrar ou alterar:</h1><br>'.$sql.'<br><br>'. $exe->error . '<br><br>');
-        $banco->des_conectar($this->SQL_HOST,$this->SQL_USER,$this->SQL_PASSWORD,$this->SQL_DATA_BASE);
+    public function ExeSql($sql) {
+        $banco = new Banco();
+        $exe = $banco->Conexao_Banco($this->SQL_HOST, $this->SQL_USER, $this->SQL_PASSWORD, $this->SQL_DATA_BASE);
+        $exe->query($sql) or die(debug($this->campos) . '<h1>Erro ao Registrar ou alterar:</h1><br>' . $sql . '<br><br>' . $exe->error . '<br><br>');
+        $banco->des_conectar($this->SQL_HOST, $this->SQL_USER, $this->SQL_PASSWORD, $this->SQL_DATA_BASE);
         return mysqli_insert_id($exe);
     }
 
-   
-    function ExeConsulta($sql = '') {
-        
+    public function ExeConsulta($sql = '') {
+
         if ($sql == "") {
-            $sql = $this->MontaConsulta();;
+            $sql = $this->MontaConsulta();
+            ;
         } else {
             $sql = $sql;
         }
-        
-        $banco = new Banco();  
-        $exe = $banco->Conexao_Banco($this->SQL_HOST,$this->SQL_USER,$this->SQL_PASSWORD,$this->SQL_DATA_BASE);    
-        $retorno_banco = $exe->query($sql) or die(debug($this->campos).'<h1>Erro ao Registrar ou alterar:</h1><br>'.$sql.'<br><br>'. $exe->error . '<br><br>');
-        $this->des_conectar($this->SQL_HOST,$this->SQL_USER,$this->SQL_PASSWORD,$this->SQL_DATA_BASE);
-       
+
+        $banco = new Banco();
+        $exe = $banco->Conexao_Banco($this->SQL_HOST, $this->SQL_USER, $this->SQL_PASSWORD, $this->SQL_DATA_BASE);
+        $retorno_banco = $exe->query($sql) or die(debug($this->campos) . '<h1>Erro ao Registrar ou alterar:</h1><br>' . $sql . '<br><br>' . $exe->error . '<br><br>');
+        $this->des_conectar($this->SQL_HOST, $this->SQL_USER, $this->SQL_PASSWORD, $this->SQL_DATA_BASE);
+
         $retorno = array();
         while ($res = mysqli_fetch_array($retorno_banco)) {
             $q_valores = count($res) / 2;
@@ -132,27 +138,26 @@ class Banco {
         }
         return $retorno;
     }
-    
-    function Conexao_Banco($SQL_HOST,$SQL_USER,$SQL_PASSWORD,$SQL_DATA_BASE){     
+
+    public function Conexao_Banco($SQL_HOST, $SQL_USER, $SQL_PASSWORD, $SQL_DATA_BASE) {
 //  echo $SQL_HOST.'-'.$SQL_USER.'-'.$SQL_PASSWORD.'-'.$SQL_DATA_BASE;exit();
-    $Conecta = new MySQLi($SQL_HOST,$SQL_USER,$SQL_PASSWORD,$SQL_DATA_BASE);
-    // Verifica se ocorreu um erro e exibe a mensagem de erro
-    if (mysqli_connect_errno()) {
-        echo trigger_error(mysqli_connect_error(), E_USER_ERROR);
-    }
-    
-    $Conecta->query("SET NAMES 'utf8'") OR trigger_error($Conecta->error, E_USER_ERROR);
-    $Conecta->query("set character_set_connection=utf8") OR trigger_error($Conecta->error, E_USER_ERROR);
-    $Conecta->query("set character_set_client=utf8") OR trigger_error($Conecta->error, E_USER_ERROR);
-    $Conecta->query("set character_set_results=utf8") OR trigger_error($Conecta->error, E_USER_ERROR);
-    return $Conecta; 
+        $Conecta = new MySQLi($SQL_HOST, $SQL_USER, $SQL_PASSWORD, $SQL_DATA_BASE);
+        // Verifica se ocorreu um erro e exibe a mensagem de erro
+        if (mysqli_connect_errno()) {
+            echo trigger_error(mysqli_connect_error(), E_USER_ERROR);
+        }
 
+        $Conecta->query("SET NAMES 'utf8'") OR trigger_error($Conecta->error, E_USER_ERROR);
+        $Conecta->query("set character_set_connection=utf8") OR trigger_error($Conecta->error, E_USER_ERROR);
+        $Conecta->query("set character_set_client=utf8") OR trigger_error($Conecta->error, E_USER_ERROR);
+        $Conecta->query("set character_set_results=utf8") OR trigger_error($Conecta->error, E_USER_ERROR);
+        return $Conecta;
     }
 
-    function des_conectar($SQL_HOST,$SQL_USER,$SQL_PASSWORD,$SQL_DATA_BASE) {
-        $Conecta = new MySQLi($SQL_HOST,$SQL_USER,$SQL_PASSWORD,$SQL_DATA_BASE);
+    public function des_conectar($SQL_HOST, $SQL_USER, $SQL_PASSWORD, $SQL_DATA_BASE) {
+        $Conecta = new MySQLi($SQL_HOST, $SQL_USER, $SQL_PASSWORD, $SQL_DATA_BASE);
         $Conecta->close();
     }
+
 }
 
-?>
